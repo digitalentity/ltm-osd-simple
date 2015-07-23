@@ -64,7 +64,7 @@ void ltm_check() {
   LTMreadIndex = 0;
   LTM_ok = 1;
   lastLTMpacket = millis();
-
+  
   if (LTMcmd==LIGHTTELEMETRY_GFRAME)
   {
     uavData.gpsLatitude = (int32_t)ltmread_u32();
@@ -123,6 +123,8 @@ void ltm_check() {
     uavData.isArmed = (ltm_armfsmode & 0b00000001) ? 1 : 0;
     uavData.isFailsafe = (ltm_armfsmode >> 1) & 0b00000001;
     uavData.flightMode = (ltm_armfsmode >> 2) & 0b00111111;     
+    
+    uavData.batCellVoltage = detectBatteryCellVoltage(uavData.batVoltage);  // LTM does not have this info, calculate ourselves
   }
   
   if (LTMcmd==LIGHTTELEMETRY_OFRAME)
@@ -147,6 +149,8 @@ void ltm_read() {
     HEADER_DATA
   }
   c_state = IDLE;
+  
+  uavData.flagTelemetryOk = ((millis() - lastLTMpacket) < 500) ? 1 : 0;
   
   while (Serial.available()) {
     c = char(Serial.read());

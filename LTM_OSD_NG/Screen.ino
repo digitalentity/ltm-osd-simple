@@ -91,7 +91,7 @@ void displayIntro(void)
 
 void displayNumberOfSat(uint16_t pos)
 {
-  if((uavData.gpsNumSat < 6) && (timer.Blink2hz)) {
+  if(((uavData.flagLowSats) || (!uavData.gpsFix)) && (timer.Blink2hz)) {
     return;
   }
 
@@ -200,22 +200,12 @@ void displayHeadingGraph(uint16_t pos)
 
 void displayBatteryVoltage(uint16_t pos)
 {
-  // detect batt cells
-  int battev = 0;
+  if(uavData.flagLowVolts && timer.Blink2hz)
+    return;
   
-  if (uavData.batVoltage >= 3000 && uavData.batVoltage <= 4300)  // 1S
-    battev = uavData.batVoltage;
-  else if (uavData.batVoltage >= 3000*2 && uavData.batVoltage <= 4300*2)  // 2S
-    battev = uavData.batVoltage / 2;
-  else if (uavData.batVoltage >= 3000*3 && uavData.batVoltage <= 4300*3)  // 2S
-    battev = uavData.batVoltage / 3;
-  else if (uavData.batVoltage >= 3000*4 && uavData.batVoltage <= 4300*4)  // 2S
-    battev = uavData.batVoltage / 4;
-  else if (uavData.batVoltage >= 3000*5 && uavData.batVoltage <= 4300*5)  // 2S
-    battev = uavData.batVoltage / 5;
-  else if (uavData.batVoltage >= 3000*6 && uavData.batVoltage <= 4300*6)  // 2S
-    battev = uavData.batVoltage / 6;
-    
+  // detect batt cells
+  int battev = uavData.batCellVoltage;
+  
   battev = constrain(battev, 3400, 4200);
   battev = map(battev, 3400, 4200, 0, 6);
   screenBuffer[0] = SYM_BATT_EMPTY - battev;
@@ -317,4 +307,35 @@ void displayHorizon(uint16_t pos)
       screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
     }
 #endif
+}
+
+void displayWarnings(uint16_t pos)
+{
+  if (timer.Blink2hz)
+    return;
+
+  if (!uavData.flagTelemetryOk) {
+    strcpy_P(screenBuffer, (char*)nodata_text);
+    MAX7456_WriteString(screenBuffer, pos);
+    return;
+  }
+
+  if (uavData.flagLowVolts) {
+    strcpy_P(screenBuffer, (char*)lowvolts_text);
+    MAX7456_WriteString(screenBuffer, pos);
+    return;
+  }
+  
+  if (uavData.flagLowSats) {
+    strcpy_P(screenBuffer, (char*)satlow_text);
+    MAX7456_WriteString(screenBuffer, pos);
+    return;
+  }
+
+  if (uavData.isArmed) {
+    strcpy_P(screenBuffer, (char*)armed_text);
+    MAX7456_WriteString(screenBuffer, pos);
+    return;
+  }
+
 }

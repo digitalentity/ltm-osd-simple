@@ -30,6 +30,9 @@
 #define  OSD_HOME_DIRECTION      (LINE04 + 14)
 #define  OSD_HOME_DISTANCE       (LINE04 + 24)
 #define  OSD_HEADING_GRAPH       (LINE15 + 10)
+#define  OSD_WARNINGS            (LINE12 + 10)
+
+#define  WARN_LOW_VOLTAGE        3800          // show warning if less than 50% capacity
 
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)

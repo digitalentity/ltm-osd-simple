@@ -59,6 +59,14 @@ void uavSanityCheck()
   if (!uavData.isArmed) {
     uavData.gpsSpeed = 0;
   }
+  
+#ifdef WARN_LOW_VOLTAGE
+  uavData.flagLowVolts = (uavData.batCellVoltage < WARN_LOW_VOLTAGE) ? 1 : 0;
+#else
+  uavData.flagLowVolts = 0;
+#endif
+
+  uavData.flagLowSats = (uavData.gpsNumSat < 6);
 }
 
 //------------------------------------------------------------------------
@@ -136,6 +144,10 @@ void loop()
 
 #ifdef OSD_HEADING_GRAPH
       displayHeadingGraph(OSD_HEADING_GRAPH);
+#endif
+
+#ifdef OSD_WARNINGS
+      displayWarnings(OSD_WARNINGS);
 #endif
     }
   }  // End of fast Timed Service Routine (50ms loop)

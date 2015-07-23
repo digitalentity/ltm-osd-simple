@@ -44,6 +44,10 @@ struct {
 } flags;
 
 struct {
+  uint8_t   flagTelemetryOk;      // Set by data receiver
+  uint8_t   flagLowSats;          // set by uavSanityCheck
+  uint8_t   flagLowVolts;
+
   uint8_t   isArmed;
   uint8_t   flightMode;
   uint8_t   isFailsafe;
@@ -73,10 +77,31 @@ struct {
   uint16_t  batVoltage;    // mv
   uint16_t  batCurrent;    // mA
   uint16_t  batUsedCapacity;    // mA*h
+  uint16_t  batCellVoltage;
   
   uint32_t  tripTime;
   uint32_t  tripDistance;
 } uavData;
+
+uint16_t detectBatteryCellVoltage(uint16_t millivolts)
+{
+  uint16_t battev = 0;
+  
+  if (uavData.batVoltage >= 3000 && uavData.batVoltage <= 4300)  // 1S
+    battev = uavData.batVoltage;
+  else if (uavData.batVoltage >= 3000*2 && uavData.batVoltage <= 4300*2)  // 2S
+    battev = uavData.batVoltage / 2;
+  else if (uavData.batVoltage >= 3000*3 && uavData.batVoltage <= 4300*3)  // 2S
+    battev = uavData.batVoltage / 3;
+  else if (uavData.batVoltage >= 3000*4 && uavData.batVoltage <= 4300*4)  // 2S
+    battev = uavData.batVoltage / 4;
+  else if (uavData.batVoltage >= 3000*5 && uavData.batVoltage <= 4300*5)  // 2S
+    battev = uavData.batVoltage / 5;
+  else if (uavData.batVoltage >= 3000*6 && uavData.batVoltage <= 4300*6)  // 2S
+    battev = uavData.batVoltage / 6;
+    
+  return battev;
+}
 
 //General use variables
 struct {
@@ -96,3 +121,10 @@ const char headGraph[] PROGMEM = {
 
 const char msgIntroString[] PROGMEM = INTRO_VERSION;
 const char msgIntroVersion[] PROGMEM = "FW VERSION: ";
+
+const char blank_text[] PROGMEM    = "";
+const char lowvolts_text[] PROGMEM  = "LOW VOLTS";
+const char nodata_text[] PROGMEM    = " NO DATA";
+const char satlow_text[] PROGMEM    = " LOW SATS";
+const char armed_text[] PROGMEM     = "  ARMED";
+
