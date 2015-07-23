@@ -59,47 +59,6 @@ void uavSanityCheck()
   if (!uavData.isArmed) {
     uavData.gpsSpeed = 0;
   }
-  
-  uavData.gpsFix = 1;
-  uavData.gpsNumSat = 6;
-  uavData.batVoltage = 12200;
-  uavData.angleRoll = 150;
-  uavData.altitude = 150;
-  
-  uavData.gpsFixHome = 1;
-  uavData.gpsLatitude      = 505496170;
-  uavData.gpsLongitude     = 1370115380;
-  uavData.gpsHomeLatitude  = 505500190;
-  uavData.gpsHomeLongitude = 1370106740;
-  
-  uavData.heading = 180;
-  
-  
-  
-    if (uavData.gpsFixHome) {
-        float rads = fabs((float)uavData.gpsHomeLatitude / 10000000.0f) * 0.0174532925f;
-        float scaleLongDown = cos(rads);
-        float dstlon, dstlat;
-        
-        //DST to Home
-        dstlat = fabs(uavData.gpsHomeLatitude - uavData.gpsLatitude) * 1.113195f;
-        dstlon = fabs(uavData.gpsHomeLongitude - uavData.gpsLongitude) * 1.113195f * scaleLongDown;
-        uavData.gpsHomeDistance = sqrt(sq(dstlat) + sq(dstlon)) / 100.0;
-     
-        //DIR to Home
-        dstlon = (uavData.gpsHomeLongitude - uavData.gpsLongitude); //OffSet_X   
-        dstlat = (uavData.gpsHomeLatitude - uavData.gpsLatitude) * (1.0f / scaleLongDown); //OffSet Y
-
-        float bearing = 90 + (atan2(dstlat, -dstlon) * 57.295775); //absolut home direction
-        if (bearing < 0) bearing += 360;//normalization
-        bearing = bearing - 180;//absolut return direction
-        if (bearing < 0) bearing += 360;//normalization
-        uavData.gpsHomeBearing = bearing;
-    }
-    else {
-        uavData.gpsHomeBearing = 0;
-    }
-  
 }
 
 //------------------------------------------------------------------------
@@ -178,7 +137,6 @@ void loop()
 #ifdef OSD_HEADING_GRAPH
       displayHeadingGraph(OSD_HEADING_GRAPH);
 #endif
-
     }
   }  // End of fast Timed Service Routine (50ms loop)
 
