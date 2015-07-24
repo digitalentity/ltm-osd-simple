@@ -79,7 +79,7 @@ void loop()
     digitalWrite(LEDPIN, LOW);
 
   ltm_read();
-
+  
   uavSanityCheck();
 
   //---------------  Start Timed Service Routines  ---------------------------------------

@@ -193,7 +193,7 @@ void displayDirectionToHome(uint16_t pos)
 void displayHeadingGraph(uint16_t pos)
 {
   int xx;
-  xx = uavData.heading * 4;
+  xx = (uavData.heading - 180) * 4;
   xx = xx + 720 + 45;
   xx = xx / 90;
   memcpy_P(screen + pos, headGraph + xx + 1, 9);
@@ -371,6 +371,7 @@ void displayFlightMode(uint16_t pos)
       break;
   }
 
+  screenBuffer[2] = 0;
   MAX7456_WriteString(screenBuffer, pos);
 }
 
