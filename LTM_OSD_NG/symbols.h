@@ -1,6 +1,6 @@
 /*
  *  symbols.h
- *  
+ *
  *
  *
  */
@@ -15,7 +15,7 @@
 // Degrees Icon for HEADING/DIRECTION HOME
 #define SYM_DEGREES 0XBD
 
-// Direction arrows 
+// Direction arrows
 #define SYM_ARROW_SOUTH 0X60
 #define SYM_ARROW_2 0X61
 #define SYM_ARROW_3 0X62
@@ -34,7 +34,7 @@
 #define SYM_ARROW_16 0X6F
 
 // Heading Graphics
-#define SYM_HEADING_N 0X18 
+#define SYM_HEADING_N 0X18
 #define SYM_HEADING_S 0X19
 #define SYM_HEADING_E 0X1A
 #define SYM_HEADING_W 0X1B
@@ -74,7 +74,7 @@
 #define SYM_ALT 0XCC
 
 // GPS Mode and Autopilot
-#define SYM_3DFIX 0XDF 
+#define SYM_3DFIX 0XDF
 #define SYM_HOLD 0XEF
 #define SYM_G_HOME 0XFF
 #define SYM_GHOME 0X9D
@@ -86,8 +86,8 @@
 #define SYM_GLAND 0XB7
 #define SYM_GLAND1 0XB8
 
-// Gimbal active Mode 
-#define SYM_GIMBAL 0X16 
+// Gimbal active Mode
+#define SYM_GIMBAL 0X16
 #define SYM_GIMBAL1 0X17
 
 
@@ -108,13 +108,13 @@
 // AH Center screen Graphics
 //#define SYM_AH_CENTER 0X01
 #ifdef ALT_CENTER
-  #define SYM_AH_CENTER_LINE 0XB0
-  #define SYM_AH_CENTER 0XB1
-  #define SYM_AH_CENTER_LINE_RIGHT 0XB2
+#define SYM_AH_CENTER_LINE 0XB0
+#define SYM_AH_CENTER 0XB1
+#define SYM_AH_CENTER_LINE_RIGHT 0XB2
 #else
-  #define SYM_AH_CENTER_LINE 0X26
-  #define SYM_AH_CENTER 0X7E
-  #define SYM_AH_CENTER_LINE_RIGHT 0XBC
+#define SYM_AH_CENTER_LINE 0X26
+#define SYM_AH_CENTER 0X7E
+#define SYM_AH_CENTER_LINE_RIGHT 0XBC
 #endif
 #define SYM_AH_RIGHT 0X02
 #define SYM_AH_LEFT 0X03
@@ -165,7 +165,7 @@
 #define SYM_DISTHOME_FT 0XB9
 #define SYM_FT 0X0F
 
-// Voltage and amperage 
+// Voltage and amperage
 #define SYM_VOLT 0XA9
 #define SYM_AMP 0X9A
 #define SYM_MAH 0XA4
@@ -180,6 +180,8 @@
 #define SYM_HORIZON1 0XC5
 #define SYM_PASS 0XAA
 #define SYM_PASS1 0XAB
+#define SYM_ALT 0XEB
+#define SYM_ALT1 0XEC
 
 // Time
 #define SYM_ON_M 0X9B

@@ -1,17 +1,17 @@
 /* #################################################################################################################
  * LightTelemetry protocol (LTM)
  *
- * Ghettostation one way telemetry protocol for really low bitrates (1200/2400 bauds). 
- *			   
+ * Ghettostation one way telemetry protocol for really low bitrates (1200/2400 bauds).
+ *
  * Protocol details: 3 different frames, little endian.
  *   G Frame (GPS position) (2hz @ 1200 bauds , 5hz >= 2400 bauds): 18BYTES
- *    0x24 0x54 0x47 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF  0xFF   0xC0   
+ *    0x24 0x54 0x47 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF  0xFF   0xC0
  *     $     T    G  --------LAT-------- -------LON---------  SPD --------ALT-------- SAT/FIX  CRC
  *   A Frame (Attitude) (5hz @ 1200bauds , 10hz >= 2400bauds): 10BYTES
- *     0x24 0x54 0x41 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xC0   
+ *     0x24 0x54 0x41 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xC0
  *      $     T   A   --PITCH-- --ROLL--- -HEADING-  CRC
  *   S Frame (Sensors) (2hz @ 1200bauds, 5hz >= 2400bauds): 11BYTES
- *     0x24 0x54 0x53 0xFF 0xFF  0xFF 0xFF    0xFF    0xFF      0xFF       0xC0     
+ *     0x24 0x54 0x53 0xFF 0xFF  0xFF 0xFF    0xFF    0xFF      0xFF       0xC0
  *      $     T   S   VBAT(mv)  Current(ma)   RSSI  AIRSPEED  ARM/FS/FMOD   CRC
  * ################################################################################################################# */
 
@@ -28,13 +28,13 @@
 #define LIGHTTELEMETRY_SFRAMELENGTH 11
 #define LIGHTTELEMETRY_OFRAMELENGTH 18
 
-static uint8_t LTMserialBuffer[LIGHTTELEMETRY_GFRAMELENGTH-4];
+static uint8_t LTMserialBuffer[LIGHTTELEMETRY_GFRAMELENGTH - 4];
 static uint8_t LTMreceiverIndex;
 static uint8_t LTMcmd;
 static uint8_t LTMrcvChecksum;
 static uint8_t LTMreadIndex;
 static uint8_t LTMframelength;
-static uint8_t LTMpassed= 0;
+static uint8_t LTMpassed = 0;
 static uint8_t crlf_count = 0;
 
 uint8_t ltmread_u8()  {
@@ -43,13 +43,13 @@ uint8_t ltmread_u8()  {
 
 uint16_t ltmread_u16() {
   uint16_t t = ltmread_u8();
-  t |= (uint16_t)ltmread_u8()<<8;
+  t |= (uint16_t)ltmread_u8() << 8;
   return t;
 }
 
 uint32_t ltmread_u32() {
   uint32_t t = ltmread_u16();
-  t |= (uint32_t)ltmread_u16()<<16;
+  t |= (uint32_t)ltmread_u16() << 16;
   return t;
 }
 
@@ -57,54 +57,54 @@ static uint8_t LTM_ok = 0;
 static uint32_t lastLTMpacket;
 
 // --------------------------------------------------------------------------------------
-// Decoded received commands 
+// Decoded received commands
 void ltm_check() {
   uint32_t dummy;
-  
+
   LTMreadIndex = 0;
   LTM_ok = 1;
   lastLTMpacket = millis();
-  
-  if (LTMcmd==LIGHTTELEMETRY_GFRAME)
+
+  if (LTMcmd == LIGHTTELEMETRY_GFRAME)
   {
     uavData.gpsLatitude = (int32_t)ltmread_u32();
     uavData.gpsLongitude = (int32_t)ltmread_u32();
-    uavData.gpsSpeed = ltmread_u8(); 
+    uavData.gpsSpeed = ltmread_u8();
     uavData.altitude = ((int32_t)ltmread_u32()) / 100;      // altitude from cm to m.
     uint8_t ltm_satsfix = ltmread_u8();
 
     uavData.gpsNumSat = (ltm_satsfix >> 2) & 0xFF;
     uavData.gpsFix    = ltm_satsfix & 0b00000011;
-    
+
     // hpdate home distance and bearing
     if (uavData.gpsFixHome) {
-        float rads = fabs((float)uavData.gpsHomeLatitude / 10000000.0f) * 0.0174532925f;
-        float scaleLongDown = cos(rads);
-        float dstlon, dstlat;
-        
-        //DST to Home
-        dstlat = fabs(uavData.gpsHomeLatitude - uavData.gpsLatitude) * 1.113195f;
-        dstlon = fabs(uavData.gpsHomeLongitude - uavData.gpsLongitude) * 1.113195f * scaleLongDown;
-        uavData.gpsHomeDistance = sqrt(sq(dstlat) + sq(dstlon)) / 100.0;
-     
-        //DIR to Home
-        dstlon = (uavData.gpsHomeLongitude - uavData.gpsLongitude); //OffSet_X   
-        dstlat = (uavData.gpsHomeLatitude - uavData.gpsLatitude) * (1.0f / scaleLongDown); //OffSet Y
+      float rads = fabs((float)uavData.gpsHomeLatitude / 10000000.0f) * 0.0174532925f;
+      float scaleLongDown = cos(rads);
+      float dstlon, dstlat;
 
-        float bearing = 90 + (atan2(dstlat, -dstlon) * 57.295775); //absolut home direction
-        if (bearing < 0) bearing += 360;//normalization
-        bearing = bearing - 180;//absolut return direction
-        if (bearing < 0) bearing += 360;//normalization
-        uavData.gpsHomeBearing = bearing;
+      //DST to Home
+      dstlat = fabs(uavData.gpsHomeLatitude - uavData.gpsLatitude) * 1.113195f;
+      dstlon = fabs(uavData.gpsHomeLongitude - uavData.gpsLongitude) * 1.113195f * scaleLongDown;
+      uavData.gpsHomeDistance = sqrt(sq(dstlat) + sq(dstlon)) / 100.0;
+
+      //DIR to Home
+      dstlon = (uavData.gpsHomeLongitude - uavData.gpsLongitude); //OffSet_X
+      dstlat = (uavData.gpsHomeLatitude - uavData.gpsLatitude) * (1.0f / scaleLongDown); //OffSet Y
+
+      float bearing = 90 + (atan2(dstlat, -dstlon) * 57.295775); //absolut home direction
+      if (bearing < 0) bearing += 360;//normalization
+      bearing = bearing - 180;//absolut return direction
+      if (bearing < 0) bearing += 360;//normalization
+      uavData.gpsHomeBearing = bearing;
     }
     else {
-        uavData.gpsHomeBearing = 0;
+      uavData.gpsHomeBearing = 0;
     }
-    
+
     LTMpassed = 1;
   }
-  
-  if (LTMcmd==LIGHTTELEMETRY_AFRAME)
+
+  if (LTMcmd == LIGHTTELEMETRY_AFRAME)
   {
     uavData.anglePitch = (int16_t)ltmread_u16() * 10;
     uavData.angleRoll = (int16_t)ltmread_u16() * 10 ;
@@ -112,22 +112,22 @@ void ltm_check() {
     if (uavData.heading < 0 ) uavData.heading = uavData.heading + 360; //convert from -180/180 to 0/360°
     LTMpassed = 1;
   }
-  if (LTMcmd==LIGHTTELEMETRY_SFRAME)
+  if (LTMcmd == LIGHTTELEMETRY_SFRAME)
   {
     uavData.batVoltage = ltmread_u16();
-    uavData.batUsedCapacity = ltmread_u16(); 
+    uavData.batUsedCapacity = ltmread_u16();
     uavData.rssi = ltmread_u8();
     uavData.airspeed = ltmread_u8();
-    
+
     uint8_t ltm_armfsmode = ltmread_u8();
     uavData.isArmed = (ltm_armfsmode & 0b00000001) ? 1 : 0;
     uavData.isFailsafe = (ltm_armfsmode >> 1) & 0b00000001;
-    uavData.flightMode = (ltm_armfsmode >> 2) & 0b00111111;     
-    
+    uavData.flightMode = (ltm_armfsmode >> 2) & 0b00111111;
+
     uavData.batCellVoltage = detectBatteryCellVoltage(uavData.batVoltage);  // LTM does not have this info, calculate ourselves
   }
-  
-  if (LTMcmd==LIGHTTELEMETRY_OFRAME)
+
+  if (LTMcmd == LIGHTTELEMETRY_OFRAME)
   {
     uavData.gpsHomeLatitude = (int32_t)ltmread_u32();
     uavData.gpsHomeLongitude = (int32_t)ltmread_u32();
@@ -149,73 +149,73 @@ void ltm_read() {
     HEADER_DATA
   }
   c_state = IDLE;
-  
+
   uavData.flagTelemetryOk = ((millis() - lastLTMpacket) < 500) ? 1 : 0;
-  
+
   while (Serial.available()) {
     c = char(Serial.read());
     /* allow CLI to be started by hitting enter 3 times, if no
     packets have been received */
-        if (LTM_ok == 0 && millis() < 20000 && millis() > 1000) {
-            if (c == '\n' || c == '\r') {
-                crlf_count++;
-            } else {
-                crlf_count = 0;
-            }
-            if (crlf_count == 3) {
-                uploadFont();
-            }
-        }
+    if (LTM_ok == 0 && millis() < 20000 && millis() > 1000) {
+      if (c == '\n' || c == '\r') {
+        crlf_count++;
+      } else {
+        crlf_count = 0;
+      }
+      if (crlf_count == 3) {
+        uploadFont();
+      }
+    }
     if (c_state == IDLE) {
-      c_state = (c=='$') ? HEADER_START1 : IDLE;
-        //Serial.println("header $" );
+      c_state = (c == '$') ? HEADER_START1 : IDLE;
+      //Serial.println("header $" );
     }
     else if (c_state == HEADER_START1) {
-      c_state = (c=='T') ? HEADER_START2 : IDLE;
-        //Serial.println("header T" );
+      c_state = (c == 'T') ? HEADER_START2 : IDLE;
+      //Serial.println("header T" );
     }
     else if (c_state == HEADER_START2) {
       switch (c) {
-         case 'G':
-           LTMframelength = LIGHTTELEMETRY_GFRAMELENGTH;
-           c_state = HEADER_MSGTYPE;
-           break;
-         case 'A':
-           LTMframelength = LIGHTTELEMETRY_AFRAMELENGTH;
-           c_state = HEADER_MSGTYPE;
-           break;
-         case 'S':
-           LTMframelength = LIGHTTELEMETRY_SFRAMELENGTH;
-           c_state = HEADER_MSGTYPE;
-           break;
-         case 'O':
-           LTMframelength = LIGHTTELEMETRY_OFRAMELENGTH;
-           c_state = HEADER_MSGTYPE;
-           break;
-         default:
-           c_state = IDLE;
+        case 'G':
+          LTMframelength = LIGHTTELEMETRY_GFRAMELENGTH;
+          c_state = HEADER_MSGTYPE;
+          break;
+        case 'A':
+          LTMframelength = LIGHTTELEMETRY_AFRAMELENGTH;
+          c_state = HEADER_MSGTYPE;
+          break;
+        case 'S':
+          LTMframelength = LIGHTTELEMETRY_SFRAMELENGTH;
+          c_state = HEADER_MSGTYPE;
+          break;
+        case 'O':
+          LTMframelength = LIGHTTELEMETRY_OFRAMELENGTH;
+          c_state = HEADER_MSGTYPE;
+          break;
+        default:
+          c_state = IDLE;
       }
       LTMcmd = c;
-      LTMreceiverIndex=0;
+      LTMreceiverIndex = 0;
     }
     else if (c_state == HEADER_MSGTYPE) {
-	  if(LTMreceiverIndex == 0) {
-	  LTMrcvChecksum = c;
-	  } 
-	  else {
-	  LTMrcvChecksum ^= c;
-	  }
-      if(LTMreceiverIndex == LTMframelength-4) {   // received checksum byte
-        if(LTMrcvChecksum == 0) {
-            ltm_check();
-            c_state = IDLE;
+      if (LTMreceiverIndex == 0) {
+        LTMrcvChecksum = c;
+      }
+      else {
+        LTMrcvChecksum ^= c;
+      }
+      if (LTMreceiverIndex == LTMframelength - 4) { // received checksum byte
+        if (LTMrcvChecksum == 0) {
+          ltm_check();
+          c_state = IDLE;
         }
         else {                                                   // wrong checksum, drop packet
-        c_state = IDLE; 
-        
+          c_state = IDLE;
+
         }
       }
-      else LTMserialBuffer[LTMreceiverIndex++]=c;
+      else LTMserialBuffer[LTMreceiverIndex++] = c;
     }
   }
 }

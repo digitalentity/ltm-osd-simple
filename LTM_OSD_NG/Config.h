@@ -31,6 +31,7 @@
 #define  OSD_HOME_DISTANCE       (LINE04 + 24)
 #define  OSD_HEADING_GRAPH       (LINE15 + 10)
 #define  OSD_WARNINGS            (LINE12 + 10)
+#define  OSD_FLIGHT_MODE         (LINE06 + 2)
 
 #define  WARN_LOW_VOLTAGE        3800          // show warning if less than 50% capacity
 
@@ -49,7 +50,7 @@
 #define MAXSTALLDETECT             // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
 #define PAL                        // Use PAL mode by default (undef to use NTSC)
 #define AUTOCAM                   // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
-//#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
+//#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC.
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 #define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
