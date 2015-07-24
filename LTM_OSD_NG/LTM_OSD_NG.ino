@@ -66,7 +66,7 @@ void uavSanityCheck()
   uavData.flagLowVolts = 0;
 #endif
 
-  uavData.flagLowSats = (uavData.gpsNumSat < 6) || (!uavData.gpsFix);
+  uavData.flagLowSats = (uavData.gpsNumSat < 5) || (!uavData.gpsFix);
 }
 
 //------------------------------------------------------------------------
