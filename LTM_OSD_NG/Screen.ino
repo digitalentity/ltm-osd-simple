@@ -104,7 +104,8 @@ void displayNumberOfSat(uint16_t pos)
 
 void displayGPSPosition(uint16_t pos)
 {
-  if (!uavData.gpsFix)
+  // blink coordinates if no fix (whould be last known position)
+  if ((!uavData.gpsFix) && timer.Blink2hz)
     return;
 
   screenBuffer[0] = SYM_LAT;
