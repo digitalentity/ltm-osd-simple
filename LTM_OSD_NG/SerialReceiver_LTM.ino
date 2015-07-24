@@ -74,7 +74,7 @@ void ltm_check() {
     uint8_t ltm_satsfix = ltmread_u8();
 
     uavData.gpsNumSat = (ltm_satsfix >> 2) & 0xFF;
-    uavData.gpsFix    = ltm_satsfix & 0b00000011;
+    uavData.gpsFix    = ((ltm_satsfix & 0b00000011) <= 1) ? 0 : 1;
 
     // hpdate home distance and bearing
     if (uavData.gpsFixHome) {
