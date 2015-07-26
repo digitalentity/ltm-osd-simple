@@ -70,7 +70,7 @@ void ltm_check() {
     uavData.gpsLatitude = (int32_t)ltmread_u32();
     uavData.gpsLongitude = (int32_t)ltmread_u32();
     uavData.gpsSpeed = ltmread_u8();
-    uavData.altitude = ((int32_t)ltmread_u32()) / 100;      // altitude from cm to m.
+    uavData.altitude = ((int32_t)ltmread_u32());      // altitude from cm to m.
     uint8_t ltm_satsfix = ltmread_u8();
 
     uavData.gpsNumSat = (ltm_satsfix >> 2) & 0xFF;
