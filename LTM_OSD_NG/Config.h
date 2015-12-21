@@ -1,7 +1,7 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 #define FW_VERSION          1
 
-//#define LOADFONT
+#define LOADFONT
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:

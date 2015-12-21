@@ -103,6 +103,7 @@ void loop()
         MAX7456Setup(); 
         displayFont();
         MAX7456_DrawScreen();
+        updateFontComplete = true;
     }
 }
 #else
