@@ -1,6 +1,8 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 #define FW_VERSION          1
 
+//#define LOADFONT
+
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 

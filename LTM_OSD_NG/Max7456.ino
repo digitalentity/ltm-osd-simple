@@ -355,3 +355,33 @@ void MAX7456Stalldetect(void) {
   if ((B00001000 & srdata) == 0)
     MAX7456Setup();
 }
+
+#ifdef LOADFONT
+void displayFont()
+{
+  for(uint8_t x = 0; x < 255; x++) {
+    screen[90 + x] = x;
+  }
+}
+
+void updateFont()
+{ 
+  uint8_t fontData[0x40];
+  boolean ledstatus = true;
+
+  for(uint8_t x = 0; x < 255; x++){
+    for(uint8_t i = 0; i < 54; i++){
+      fontData[i] = (uint8_t)pgm_read_byte(fontdata + (64 * x) + i);
+    }
+    write_NVM(x, fontData);
+    ledstatus = !ledstatus;
+    if (ledstatus == true){
+      digitalWrite(LEDPIN,HIGH);
+    }
+    else{
+      digitalWrite(LEDPIN,LOW);
+    }
+    delay(20); // Shouldn't be needed due to status reg wait.
+  }
+}
+#endif

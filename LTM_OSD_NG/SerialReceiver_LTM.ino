@@ -154,18 +154,6 @@ void ltm_read() {
 
   while (Serial.available()) {
     c = char(Serial.read());
-    /* allow CLI to be started by hitting enter 3 times, if no
-    packets have been received */
-    if (LTM_ok == 0 && millis() < 20000 && millis() > 1000) {
-      if (c == '\n' || c == '\r') {
-        crlf_count++;
-      } else {
-        crlf_count = 0;
-      }
-      if (crlf_count == 3) {
-        uploadFont();
-      }
-    }
     if (c_state == IDLE) {
       c_state = (c == '$') ? HEADER_START1 : IDLE;
       //Serial.println("header $" );

@@ -149,3 +149,31 @@ const char nodata_text[] PROGMEM    = " NO DATA";
 const char satlow_text[] PROGMEM    = " LOW SATS";
 const char armed_text[] PROGMEM     = "  ARMED";
 
+#ifdef LOADFONT
+void displayFont();
+void updateFont();
+#endif
+
+void MAX7456Stalldetect(void);
+void MAX7456_Send(uint8_t add, uint8_t data);
+void MAX7456_DrawScreen();
+void MAX7456_WriteString_P(const char *string, int Adresse);
+void MAX7456_WriteString(const char *string, int Adresse);
+void MAX7456Setup(void);
+
+void ltm_check();
+void ltm_read();
+
+void displayIntro(void);
+void displayNumberOfSat(uint16_t pos);
+void displayGPSPosition(uint16_t pos);
+void displaySpeed(uint16_t pos);
+void displayAltitude(uint16_t pos);
+void displayDistanceToHome(uint16_t pos);
+void displayDirectionToHome(uint16_t pos);
+void displayHeadingGraph(uint16_t pos);
+void displayBatteryVoltage(uint16_t pos);
+void displayTripTime(uint16_t pos);
+void displayHorizon(uint16_t pos);
+void displayFlightMode(uint16_t pos);
+void displayWarnings(uint16_t pos);

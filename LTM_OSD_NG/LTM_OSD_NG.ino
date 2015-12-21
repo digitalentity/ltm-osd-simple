@@ -1,5 +1,3 @@
-
-
 /*
 LTM-NG OSD ...
 
@@ -19,6 +17,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
+#include <Arduino.h>
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include "Config.h"
@@ -26,6 +25,11 @@ This work is based on the following open source work :-
 #include "symbols.h"
 #include "GlobalVariables.h"
 #include "math.h"
+
+#ifdef LOADFONT
+  #include "font.h"
+  bool updateFontComplete = false;
+#endif
 
 char screen[480];      // Main screen ram for MAX7456
 char screenBuffer[20];
@@ -69,6 +73,39 @@ void uavSanityCheck()
   uavData.flagLowSats = (uavData.gpsNumSat < 5) || (!uavData.gpsFix);
 }
 
+//------------------------------------------------------------------------
+// MISC
+
+void resetFunc(void)
+{
+  asm volatile ("  jmp 0");
+}
+
+void calculateTrip(void)
+{
+  static float tripSum = 0;
+  if (uavData.gpsFix && uavData.isArmed && (uavData.gpsSpeed > 0)) {
+#ifdef METRIC
+    tripSum += uavData.gpsSpeed * 0.0010;       //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)
+#else
+    tripSum += uavData.gpsSpeed * 0.0032808;    //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+#endif
+  }
+  uavData.tripDistance = (uint32_t) tripSum;
+}
+
+
+#ifdef LOADFONT
+void loop()
+{
+    if (!updateFontComplete) {
+        updateFont();
+        MAX7456Setup(); 
+        displayFont();
+        MAX7456_DrawScreen();
+    }
+}
+#else
 //------------------------------------------------------------------------
 void loop()
 {
@@ -176,24 +213,4 @@ void loop()
     timer.elapsedSec++;
   }
 }  // End of main loop
-
-//------------------------------------------------------------------------
-// MISC
-
-void resetFunc(void)
-{
-  asm volatile ("  jmp 0");
-}
-
-void calculateTrip(void)
-{
-  static float tripSum = 0;
-  if (uavData.gpsFix && uavData.isArmed && (uavData.gpsSpeed > 0)) {
-#ifdef METRIC
-    tripSum += uavData.gpsSpeed * 0.0010;       //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)
-#else
-    tripSum += uavData.gpsSpeed * 0.0032808;    //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
 #endif
-  }
-  uavData.tripDistance = (uint32_t) tripSum;
-}
