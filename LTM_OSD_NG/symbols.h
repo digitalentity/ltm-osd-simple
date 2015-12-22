@@ -1,9 +1,9 @@
 /*
- *  symbols.h
- *
- *
- *
- */
+*  symbols.h
+*
+*
+*
+*/
 
 #define SYM_BLANK 0X3F
 

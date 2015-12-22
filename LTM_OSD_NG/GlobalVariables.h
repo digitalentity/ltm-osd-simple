@@ -36,11 +36,11 @@
 #define OSD_INTRO_POSITION              (LINE + 4)
 
 struct {
-  uint8_t nextCharToRequest;
-  uint8_t lastCharToRequest;
-  uint8_t retransmitQueue;
+    uint8_t nextCharToRequest;
+    uint8_t lastCharToRequest;
+    uint8_t retransmitQueue;
 
-  uint8_t videoMode;
+    uint8_t videoMode;
 } flags;
 
 // Flight mode(0-19): 0: Manual, 1: Rate, 2: Attitude/Angle, 3: Horizon, 4: Acro, 5: Stabilized1, 6: Stabilized2, 7: Stabilized3,
@@ -64,80 +64,80 @@ struct {
 #define FLIGHT_MODE_LAND            15
 
 struct {
-  uint8_t   flagTelemetryOk;      // Set by data receiver
-  uint8_t   flagLowSats;          // set by uavSanityCheck
-  uint8_t   flagLowVolts;
+    uint8_t   flagTelemetryOk;      // Set by data receiver
+    uint8_t   flagLowSats;          // set by uavSanityCheck
+    uint8_t   flagLowVolts;
 
-  uint8_t   isArmed;
-  uint8_t   flightMode;
-  uint8_t   isFailsafe;
+    uint8_t   isArmed;
+    uint8_t   flightMode;
+    uint8_t   isFailsafe;
 
-  uint8_t   gpsNumSat;
-  uint8_t   gpsFix;
-  uint16_t  gpsSpeed;
-  int32_t   gpsLatitude;
-  int32_t   gpsLongitude;
+    uint8_t   gpsNumSat;
+    uint8_t   gpsFix;
+    uint16_t  gpsSpeed;
+    int32_t   gpsLatitude;
+    int32_t   gpsLongitude;
 
-  uint8_t   gpsFixHome;
-  int32_t   gpsHomeLatitude;
-  int32_t   gpsHomeLongitude;
+    uint8_t   gpsFixHome;
+    int32_t   gpsHomeLatitude;
+    int32_t   gpsHomeLongitude;
 
-  uint32_t  gpsHomeDistance;
-  int       gpsHomeBearing;
+    uint32_t  gpsHomeDistance;
+    int       gpsHomeBearing;
 
-  int16_t   altitude;
+    int16_t   altitude;
 
-  int16_t   rssi;
-  int16_t   airspeed;
+    int16_t   rssi;
+    int16_t   airspeed;
 
-  int       anglePitch;
-  int       angleRoll;
-  int       heading;
+    int       anglePitch;
+    int       angleRoll;
+    int       heading;
 
-  uint16_t  batVoltage;    // mv
-  uint16_t  batCurrent;    // mA
-  uint16_t  batUsedCapacity;    // mA*h
-  uint16_t  batCellVoltage;
+    uint16_t  batVoltage;    // mv
+    uint16_t  batCurrent;    // mA
+    uint16_t  batUsedCapacity;    // mA*h
+    uint16_t  batCellVoltage;
 
-  uint32_t  tripTime;
-  uint32_t  tripDistance;
+    uint32_t  tripTime;
+    uint32_t  tripDistance;
 } uavData;
 
 uint16_t detectBatteryCellVoltage(uint16_t millivolts)
 {
-  uint16_t battev = 0;
+    uint16_t battev = 0;
 
-  if (uavData.batVoltage >= 3000 && uavData.batVoltage <= 4300)  // 1S
+    if (uavData.batVoltage >= 3000 && uavData.batVoltage <= 4300)  // 1S
     battev = uavData.batVoltage;
-  else if (uavData.batVoltage >= 3000 * 2 && uavData.batVoltage <= 4300 * 2) // 2S
+    else if (uavData.batVoltage >= 3000 * 2 && uavData.batVoltage <= 4300 * 2) // 2S
     battev = uavData.batVoltage / 2;
-  else if (uavData.batVoltage >= 3000 * 3 && uavData.batVoltage <= 4300 * 3) // 2S
+    else if (uavData.batVoltage >= 3000 * 3 && uavData.batVoltage <= 4300 * 3) // 2S
     battev = uavData.batVoltage / 3;
-  else if (uavData.batVoltage >= 3000 * 4 && uavData.batVoltage <= 4300 * 4) // 2S
+    else if (uavData.batVoltage >= 3000 * 4 && uavData.batVoltage <= 4300 * 4) // 2S
     battev = uavData.batVoltage / 4;
-  else if (uavData.batVoltage >= 3000 * 5 && uavData.batVoltage <= 4300 * 5) // 2S
+    else if (uavData.batVoltage >= 3000 * 5 && uavData.batVoltage <= 4300 * 5) // 2S
     battev = uavData.batVoltage / 5;
-  else if (uavData.batVoltage >= 3000 * 6 && uavData.batVoltage <= 4300 * 6) // 2S
+    else if (uavData.batVoltage >= 3000 * 6 && uavData.batVoltage <= 4300 * 6) // 2S
     battev = uavData.batVoltage / 6;
 
-  return battev;
+    return battev;
 }
 
 //General use variables
 struct {
-  uint8_t tenthSec;
-  uint8_t halfSec;
-  uint8_t Blink2hz;                          // This is turing on and off at 2hz
-  uint8_t Blink10hz;                         // This is turing on and off at 10hz
-  int lastCallSign;                          // Callsign_timer
-  uint32_t seconds;
-  uint32_t elapsedSec;
+    uint8_t tenthSec;
+    uint8_t halfSec;
+    uint8_t Blink2hz;                          // This is turing on and off at 2hz
+    uint8_t Blink10hz;                         // This is turing on and off at 10hz
+    int lastCallSign;                          // Callsign_timer
+    uint32_t seconds;
+    uint32_t elapsedSec;
 }
 timer;
 
 // For Heading
 const char headGraph[] PROGMEM = {
-  0x1d, 0x1a, 0x1d, 0x1c, 0x1d, 0x18, 0x1d, 0x1c, 0x1d, 0x1a, 0x1d, 0x1c, 0x1d, 0x19, 0x1d, 0x1c, 0x1d, 0x1b, 0x1d, 0x1c, 0x1d, 0x18, 0x1d, 0x1c, 0x1d, 0x1b, 0x1d
+    0x1d, 0x1a, 0x1d, 0x1c, 0x1d, 0x18, 0x1d, 0x1c, 0x1d, 0x1a, 0x1d, 0x1c, 0x1d, 0x19, 0x1d, 0x1c, 0x1d, 0x1b, 0x1d, 0x1c, 0x1d, 0x18, 0x1d, 0x1c, 0x1d, 0x1b, 0x1d
 };
 
 const char msgIntroString[] PROGMEM = INTRO_VERSION;
