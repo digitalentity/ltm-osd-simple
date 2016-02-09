@@ -108,6 +108,16 @@ void loop()
 }
 #else
 //------------------------------------------------------------------------
+
+#ifdef USE_ADC_VOLTAGE
+void updateADC()
+{
+    uavData.batVoltage = (float)analogRead(ADC_VOLTAGE_PIN) * (5.0 / 1024) * ADC_VOLTAGE_DIVISOR_RATIO * 1000; //mv
+    uavData.batCellVoltage = detectBatteryCellVoltage(uavData.batVoltage);  // LTM does not have this info, calculate ourselves  
+}
+#endif
+
+//------------------------------------------------------------------------
 void loop()
 {
     // Blink Basic Sanity Test Led at 0.5hz
@@ -117,6 +127,10 @@ void loop()
     digitalWrite(LEDPIN, LOW);
 
     ltm_read();
+
+#ifdef USE_ADC_VOLTAGE
+    updateADC();
+#endif
 
     uavSanityCheck();
 

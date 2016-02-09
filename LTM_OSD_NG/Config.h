@@ -1,22 +1,24 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 #define FW_VERSION          1
 
-#define LOADFONT
+//#define LOADFONT
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
+
+#define USE_ADC_VOLTAGE
 
 /********************       PROTOCOL settings      *********************/
 #define PROTOCOL_LIGHTTELEMETRY
 
 /******************** Serial speed settings *********************/
 // Choose ONLY ONE option:
-//#define BAUDRATE 115200
+#define BAUDRATE 115200
 //#define BAUDRATE 57600
 //#define BAUDRATE 38400
 //#define BAUDRATE 19200
-#define BAUDRATE 9600
+//#define BAUDRATE 9600
 
 #define METRIC
 //#define IMPERIAL

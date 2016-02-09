@@ -1,5 +1,8 @@
 /********************  HARDWARE PINS definitions  *********************/
-#define LEDPIN        7
+#define LEDPIN                    7
+#define ADC_VOLTAGE_PIN           A0
+#define ADC_VOLTAGE_DIVISOR_RATIO 16.01f
+
 
 // All aircraft / FC types defaults...
 #define HEADINGCORRECT              // required to correct for MWheading being 0>360 vs MWII -180>+180. Leave permanently enabled
