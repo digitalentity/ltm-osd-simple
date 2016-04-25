@@ -7,7 +7,7 @@
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
 
-#define USE_ADC_VOLTAGE
+//#define USE_ADC_VOLTAGE
 
 /********************       PROTOCOL settings      *********************/
 #define PROTOCOL_LIGHTTELEMETRY
@@ -37,7 +37,7 @@
 #define  OSD_WARNINGS            (LINE12 + 10)
 #define  OSD_FLIGHT_MODE         (LINE06 + 2)
 
-#define  WARN_LOW_VOLTAGE        3800          // show warning if less than 50% capacity
+#define  WARN_LOW_VOLTAGE        3700          // show warning if less than 50% capacity
 
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)

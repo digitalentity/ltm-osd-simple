@@ -393,11 +393,13 @@ void displayWarnings(uint16_t pos)
         return;
     }
 
+#if defined(OSD_GPS_SPEED) || defined(OSD_GPS_SATS) || defined(OSD_GPS_POSITION) || defined(OSD_HOME_DIRECTION) || defined(OSD_HOME_DISTANCE)
     if (uavData.flagLowSats) {
         strcpy_P(screenBuffer, (char*)satlow_text);
         MAX7456_WriteString(screenBuffer, pos);
         return;
     }
+#endif
 
     if (uavData.isArmed) {
         strcpy_P(screenBuffer, (char*)armed_text);

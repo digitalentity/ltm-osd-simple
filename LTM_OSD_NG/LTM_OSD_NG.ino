@@ -94,7 +94,6 @@ void calculateTrip(void)
     uavData.tripDistance = (uint32_t) tripSum;
 }
 
-
 #ifdef LOADFONT
 void loop()
 {
@@ -122,9 +121,9 @@ void loop()
 {
     // Blink Basic Sanity Test Led at 0.5hz
     if (timer.Blink2hz)
-    digitalWrite(LEDPIN, HIGH);
+      digitalWrite(LEDPIN, HIGH);
     else
-    digitalWrite(LEDPIN, LOW);
+      digitalWrite(LEDPIN, LOW);
 
     ltm_read();
 
@@ -144,7 +143,7 @@ void loop()
         timer.Blink10hz = !timer.Blink10hz;
         calculateTrip();
     }  // End of slow Timed Service Routine (100ms loop)
-
+ 
     if ((currentMillis - previous_millis_high) >= FAST_CYCLE_TIME) // 20 Hz (Executed every 50ms)
     {
         previous_millis_high = previous_millis_high + FAST_CYCLE_TIME;
@@ -162,7 +161,7 @@ void loop()
             displayNumberOfSat(OSD_GPS_SATS);
 #endif
 
-#ifdef OSD_GPS_SATS
+#ifdef OSD_GPS_POSITION
             displayGPSPosition(OSD_GPS_POSITION);
 #endif
 

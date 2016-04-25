@@ -123,6 +123,29 @@ uint16_t detectBatteryCellVoltage(uint16_t millivolts)
     return battev;
 }
 
+uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
+{
+    static unsigned long previous_millis = 0;
+    static uint16_t previous_mahUsed = 0;
+    static uint16_t calculatedCurrent = 0;
+
+    unsigned long current_millis = millis();
+
+    if ((current_millis - previous_millis) > 5000 || (previous_mahUsed > mahUsed)) {
+        // Stalled or invalid telemetry. Reset statistics
+        calculatedCurrent = 0;
+        previous_mahUsed = mahUsed;
+        previous_millis = current_millis;
+    }
+    else if ((current_millis - previous_millis) > 500 && (previous_mahUsed < mahUsed)) {
+        calculatedCurrent = (mahUsed - previous_mahUsed) / (current_millis - previous_millis);
+        previous_mahUsed = mahUsed;
+        previous_millis = current_millis;
+    }
+
+    return calculatedCurrent;
+}
+
 //General use variables
 struct {
     uint8_t tenthSec;

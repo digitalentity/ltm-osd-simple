@@ -125,6 +125,7 @@ void ltm_check() {
         uavData.flightMode = (ltm_armfsmode >> 2) & 0b00111111;
 
         uavData.batCellVoltage = detectBatteryCellVoltage(uavData.batVoltage);  // LTM does not have this info, calculate ourselves
+        uavData.batCurrent = calculateCurrentFromConsumedCapacity(uavData.batUsedCapacity);
     }
 
     if (LTMcmd == LIGHTTELEMETRY_OFRAME)
