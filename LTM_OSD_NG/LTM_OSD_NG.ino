@@ -19,12 +19,14 @@ Jean Gabriel Maurice. He started the revolution. He was the first....
 //------------------------------------------------------------------------
 #include <Arduino.h>
 #include <avr/pgmspace.h>
-#include <EEPROM.h>
 #include "Config.h"
 #include "Def.h"
 #include "symbols.h"
 #include "GlobalVariables.h"
 #include "math.h"
+
+#define MAVLINK_MAX_PAYLOAD_LEN 64
+#include "mavlink/v1.0/ardupilotmega/mavlink.h"
 
 #ifdef LOADFONT
 #include "font.h"
@@ -125,7 +127,7 @@ void loop()
     else
       digitalWrite(LEDPIN, LOW);
 
-    ltm_read();
+    readTelemetry();
 
 #ifdef USE_ADC_VOLTAGE
     updateADC();

@@ -10,7 +10,8 @@
 //#define USE_ADC_VOLTAGE
 
 /********************       PROTOCOL settings      *********************/
-#define PROTOCOL_LIGHTTELEMETRY
+//#define PROTOCOL_LIGHTTELEMETRY
+#define PROTOCOL_MAVLINK
 
 /******************** Serial speed settings *********************/
 // Choose ONLY ONE option:

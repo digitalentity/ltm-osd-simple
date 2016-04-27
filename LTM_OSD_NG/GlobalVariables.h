@@ -35,14 +35,6 @@
 /* OSD position */
 #define OSD_INTRO_POSITION              (LINE + 4)
 
-struct {
-    uint8_t nextCharToRequest;
-    uint8_t lastCharToRequest;
-    uint8_t retransmitQueue;
-
-    uint8_t videoMode;
-} flags;
-
 // Flight mode(0-19): 0: Manual, 1: Rate, 2: Attitude/Angle, 3: Horizon, 4: Acro, 5: Stabilized1, 6: Stabilized2, 7: Stabilized3,
 // 8: Altitude Hold, 9: Loiter/GPS Hold, 10: Auto/Waypoints, 11: Heading Hold / headFree, 
 // 12: Circle, 13: RTH, 14: FollowMe, 15: LAND, 16:FlybyWireA, 17: FlybywireB, 18: Cruise, 19: Unknown
@@ -90,9 +82,9 @@ struct {
     int16_t   rssi;
     int16_t   airspeed;
 
-    int       anglePitch;
-    int       angleRoll;
-    int       heading;
+    int       anglePitch; // deg * 10
+    int       angleRoll;  // deg * 10
+    int       heading;    // deg
 
     uint16_t  batVoltage;    // mv
     uint16_t  batCurrent;    // mA
@@ -155,8 +147,7 @@ struct {
     int lastCallSign;                          // Callsign_timer
     uint32_t seconds;
     uint32_t elapsedSec;
-}
-timer;
+} timer;
 
 // For Heading
 const char headGraph[] PROGMEM = {
@@ -184,8 +175,7 @@ void MAX7456_WriteString_P(const char *string, int Adresse);
 void MAX7456_WriteString(const char *string, int Adresse);
 void MAX7456Setup(void);
 
-void ltm_check();
-void ltm_read();
+void readTelemetry();
 
 void displayIntro(void);
 void displayNumberOfSat(uint16_t pos);

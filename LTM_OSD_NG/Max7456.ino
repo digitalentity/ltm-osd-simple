@@ -101,6 +101,7 @@
 //uint8_t ENABLE_display_vert;
 //uint8_t DISABLE_display;
 uint16_t MAX_screen_size;
+uint8_t videoMode;
 
 //////////////////////////////////////////////////////////////
 uint8_t spi_transfer(uint8_t data)
@@ -119,9 +120,9 @@ void MAX7456Setup(void)
     uint8_t MAX_screen_rows;
 
 #ifdef PAL
-    flags.videoMode = 1;
+    videoMode = 1;
 #else
-    flags.videoMode = 0;
+    videoMode = 0;
 #endif
 
     pinMode(MAX7456RESET, OUTPUT);
@@ -170,14 +171,14 @@ void MAX7456Setup(void)
     srdata = spi_transfer(0xFF);
 #endif //AUTOCAMWAIT  
     if ((B00000001 & srdata) == B00000001) {    //PAL
-        flags.videoMode = 1;
+        videoMode = 1;
     }
     else if ((B00000010 & srdata) == B00000010) { //NTSC
-        flags.videoMode = 0;
+        videoMode = 0;
     }
 #endif //AUTOCAM
 
-    if (flags.videoMode) {   // PAL
+    if (videoMode) {   // PAL
         MAX7456_reset = 0x42;
         MAX_screen_size = 480;
         MAX_screen_rows = 16;
@@ -201,7 +202,7 @@ void MAX7456Setup(void)
     // make sure the Max7456 is enabled
     spi_transfer(VM0_reg);
 
-    if (flags.videoMode) {
+    if (videoMode) {
         spi_transfer(OSD_ENABLE | VIDEO_MODE_PAL);
     }
     else {
@@ -320,7 +321,7 @@ void write_NVM(uint8_t char_address, uint8_t * fontData)
 {
     digitalWrite(MAX7456SELECT, LOW);
     spi_transfer(VM0_reg);
-    spi_transfer(flags.videoMode ? 0x40 : 0);
+    spi_transfer(videoMode ? 0x40 : 0);
 
     spi_transfer(MAX7456ADD_CMAH); // set start address high
     spi_transfer(char_address);
@@ -341,7 +342,7 @@ void write_NVM(uint8_t char_address, uint8_t * fontData)
     while ((spi_transfer(MAX7456ADD_STAT) & STATUS_reg_nvr_busy) != 0x00);
 
     spi_transfer(VM0_reg); // turn on screen next vertical
-    spi_transfer(flags.videoMode ? 0x4c : 0x0c);
+    spi_transfer(videoMode ? 0x4c : 0x0c);
     digitalWrite(MAX7456SELECT, HIGH);
 }
 

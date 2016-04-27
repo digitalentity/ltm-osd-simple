@@ -139,7 +139,7 @@ void ltm_check() {
     }
 }
 
-void ltm_read() {
+void readTelemetry() {
     uint8_t c;
 
     static enum _serial_state {
