@@ -15,8 +15,8 @@
 
 /******************** Serial speed settings *********************/
 // Choose ONLY ONE option:
-#define BAUDRATE 115200
-//#define BAUDRATE 57600
+//#define BAUDRATE 115200
+#define BAUDRATE 57600
 //#define BAUDRATE 38400
 //#define BAUDRATE 19200
 //#define BAUDRATE 9600

@@ -68,12 +68,13 @@ void parseMavlinkMessage(mavlink_message_t *msg)
     //mavdata.vfr_hud.heading = mavlink_msg_vfr_hud_get_heading(msg);
     break;
   case MAVLINK_MSG_ID_ATTITUDE:
-    uavData.anglePitch = ToDeg(mavlink_msg_attitude_get_pitch(msg)) * 10;
+    uavData.anglePitch = -ToDeg(mavlink_msg_attitude_get_pitch(msg)) * 10;
     uavData.angleRoll = ToDeg(mavlink_msg_attitude_get_roll(msg)) * 10;
     uavData.heading = ToDeg(mavlink_msg_attitude_get_yaw(msg));
     if (uavData.heading < 0 ) uavData.heading = uavData.heading + 360; //convert from -180/180 to 0/360°
     break;
   case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
+    uavData.gpsFixHome = true;
     uavData.gpsHomeBearing = mavlink_msg_nav_controller_output_get_target_bearing(msg);
     uavData.gpsHomeDistance = mavlink_msg_nav_controller_output_get_wp_dist(msg);
     break;
