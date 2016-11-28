@@ -206,6 +206,14 @@ void loop()
 #ifdef OSD_FLIGHT_MODE
             displayFlightMode(OSD_FLIGHT_MODE);
 #endif
+
+#ifdef OSD_RSSI
+            displayRSSI(OSD_RSSI);
+#endif
+
+#ifdef OSD_TRIP_DISTANCE
+            displayTripDistance(OSD_TRIP_DISTANCE);
+#endif
         }
     }  // End of fast Timed Service Routine (50ms loop)
 

@@ -10,8 +10,8 @@
 //#define USE_ADC_VOLTAGE
 
 /********************       PROTOCOL settings      *********************/
-//#define PROTOCOL_LIGHTTELEMETRY
-#define PROTOCOL_MAVLINK
+#define PROTOCOL_LIGHTTELEMETRY
+//#define PROTOCOL_MAVLINK
 
 /******************** Serial speed settings *********************/
 // Choose ONLY ONE option:
@@ -25,20 +25,22 @@
 //#define IMPERIAL
 
 /********************       Information settings      *********************/
-#define  OSD_GPS_SATS            (LINE04 + 2)
 #define  OSD_GPS_POSITION        (LINE02 + 2)
+#define  OSD_GPS_SATS            (LINE03 + 2)
+#define  OSD_RSSI                (LINE04 + 2)
 #define  OSD_BAT_VOLTAGE         (LINE15 + 3)
 #define  OSD_TRIP_TIME           (LINE15 + 22)
 #define  OSD_AHI                 (LINE08 + 7)
 #define  OSD_GPS_SPEED           (LINE08 + 3)
 #define  OSD_ALTITUDE            (LINE08 + 23)
-#define  OSD_HOME_DIRECTION      (LINE04 + 14)
-#define  OSD_HOME_DISTANCE       (LINE04 + 24)
+#define  OSD_HOME_DIRECTION      (LINE03 + 14)
+#define  OSD_HOME_DISTANCE       (LINE03 + 24)
+#define  OSD_TRIP_DISTANCE       (LINE14 + 22)
 #define  OSD_HEADING_GRAPH       (LINE15 + 10)
 #define  OSD_WARNINGS            (LINE12 + 10)
 #define  OSD_FLIGHT_MODE         (LINE06 + 2)
 
-#define  WARN_LOW_VOLTAGE        3700          // show warning if less than 50% capacity
+#define  WARN_LOW_VOLTAGE        3500          // show warning if less than 50% capacity
 
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)

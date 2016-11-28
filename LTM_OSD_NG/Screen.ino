@@ -102,6 +102,14 @@ void displayNumberOfSat(uint16_t pos)
     MAX7456_WriteString(screenBuffer, pos);
 }
 
+void displayRSSI(uint16_t pos)
+{
+    int rssi = uavData.rssi * 100 / 255;
+    screenBuffer[0] = SYM_RSSI;
+    itoa(rssi, screenBuffer + 1, 10);
+    MAX7456_WriteString(screenBuffer, pos);
+}
+
 void displayGPSPosition(uint16_t pos)
 {
     // blink coordinates if no fix (whould be last known position)
@@ -153,10 +161,10 @@ void displayAltitude(uint16_t pos)
 void displayDistanceToHome(uint16_t pos)
 {
     if (!(uavData.gpsFix && uavData.gpsFixHome))
-    return;
+      return;
 
     if (uavData.gpsHomeDistance <= 2 && timer.Blink2hz)
-    return;
+      return;
 
     int16_t dist;
 
@@ -166,6 +174,26 @@ void displayDistanceToHome(uint16_t pos)
 #else
     dist = uavData.gpsHomeDistance * 3.2808;           // mt to feet
     screenBuffer[0] = SYM_DISTHOME_FT;
+#endif
+
+    itoa(dist, screenBuffer + 1, 10);
+    MAX7456_WriteString(screenBuffer, pos);
+}
+
+
+void displayTripDistance(uint16_t pos)
+{
+    if (!(uavData.gpsFix))
+      return;
+
+    int16_t dist;
+
+#ifdef METRIC
+    dist = uavData.tripDistance;                    // Mt
+    screenBuffer[0] = SYM_M;
+#else
+    dist = uavData.tripDistance;                    // mt to feet
+    screenBuffer[0] = SYM_FT;
 #endif
 
     itoa(dist, screenBuffer + 1, 10);
@@ -401,9 +429,11 @@ void displayWarnings(uint16_t pos)
     }
 #endif
 
+    /*
     if (uavData.isArmed) {
         strcpy_P(screenBuffer, (char*)armed_text);
         MAX7456_WriteString(screenBuffer, pos);
         return;
     }
+    */
 }

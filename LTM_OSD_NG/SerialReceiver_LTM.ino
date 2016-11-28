@@ -69,7 +69,7 @@ void ltm_check() {
     {
         uavData.gpsLatitude = (int32_t)ltmread_u32();
         uavData.gpsLongitude = (int32_t)ltmread_u32();
-        uavData.gpsSpeed = ltmread_u8() * 100;            // LTM gives m/s, we expect cm/s
+        uavData.gpsSpeed = ((int32_t)ltmread_u8()) * 100;            // LTM gives m/s, we expect cm/s
         uavData.altitude = ((int32_t)ltmread_u32());      // altitude from cm to m.
         uint8_t ltm_satsfix = ltmread_u8();
 
